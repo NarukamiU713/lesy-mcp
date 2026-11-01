@@ -1,6 +1,6 @@
 # 工具参考
 
-每个工具需要 Token 的一个权限（见 [Token 和权限](tokens.md)）。客户端通过 `tools/list` 能看到每个工具完整的 JSON Schema，这里说明它们的含义和规则。
+每个工具需要 Token 的一个权限（见 [Token 和权限](tokens.md)）。每个工具都有对应的 `lesy` 命令（`lesy call <tool> '<json>'` 可以直接调用任意工具）；MCP 客户端通过 `tools/list` 能看到完整的 JSON Schema。这里说明它们的含义和规则。
 
 ## 通用规则
 
@@ -14,12 +14,16 @@
 
 ### `list_articles`（`articles`）
 
+命令行：`lesy articles [--limit N] [--offset N]`
+
 没有删除的文章，最近更新的在前，不含正文。
 
 - 参数：`{ limit?, offset? }`
 - 返回：`{ articles: [{ id, title, tags, tagsAuto, createdAt, updatedAt }], total, offset }`
 
 ### `get_article`（`articles`）
+
+命令行：`lesy article <id> [--offset N] [--max-chars N]`
 
 一篇文章的元数据、正文总长度 `length`，以及从 `offset` 开始的一页正文。
 
@@ -29,6 +33,8 @@
 
 ### `learning_history`（`records`）
 
+命令行：`lesy history [--period P | --from YYYY-MM-DD [--to YYYY-MM-DD]]`
+
 某一天或某段时间记录的表达和备注，默认最近 7 天。
 
 - 参数：`{ from?, to?, period? }`
@@ -37,11 +43,15 @@
 
 ### `search_records`（`records`）
 
+命令行：`lesy search <query...>`
+
 在记录过的表达中查一个词或表达，也按原形查。
 
 - 参数：`{ query }`，1–200 个字符。
 
 ### `review_quiz`（`records`）
+
+命令行：`lesy quiz [--period P | --from … [--to …]] [--count N]`
 
 用记录生成复习卡片和答案，默认最近 7 天；这段时间没有记录时用最新的记录。
 
@@ -51,11 +61,15 @@
 
 ### `list_flashcards`（`records`）
 
+命令行：`lesy flashcards [--limit N] [--offset N]`
+
 “Meine Karteikarten”：文章的卡片组和学习助手回答里的复习卡片，按卡片组分页，新的在前。卡片的文字截到 1000 个字符。
 
 - 参数：`{ limit?, offset? }`
 
 ### `get_definition`（`records`）
+
+命令行：`lesy definition <word>`
 
 读者自己的释义（“Eigene Definition”），也找大小写不同的同一个词。
 
@@ -63,6 +77,8 @@
 - 返回：没有时是 `{ definition: null }`，不算错误。
 
 ### `lookup_word`（`dictionary`）
+
+命令行：`lesy lookup <word> [--context TEXT]`
 
 查词典，和在文章中点这个词一样。返回原形、读法、候选和最多 8 个词条（词典、词头、摘要，Markdown 正文截到 2000 个字符）。
 
@@ -77,12 +93,16 @@
 
 ### `set_definition`
 
+命令行：`lesy set-definition <word> --meaning TEXT [--part-of-speech TEXT] [--notes TEXT]`
+
 写入读者自己的释义。同一个词（区分大小写）已有的释义**整条覆盖**，省略的 `partOfSpeech`、`notes` 变成空字符串。
 
 - 参数：`{ word, meaning, partOfSpeech?, notes? }`
 - 返回：`{ definition, previous }`。`previous` 是原来的释义，没有时是 `null`；可以用同一个工具恢复。
 
 ### `set_expression_note`
+
+命令行：`lesy set-note <articleId> <expressionId> <note>`
 
 只改一条记录的备注。
 
@@ -93,6 +113,8 @@
 浏览器里还没保存的面板修改会在下次保存时覆盖这条备注。
 
 ### `save_flashcards`
+
+命令行：`lesy save-flashcards <articleId> --file <cards.json|->`
 
 **只新建**一篇文章的卡片组，已经有卡片组时什么也不改。
 

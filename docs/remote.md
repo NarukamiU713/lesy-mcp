@@ -2,11 +2,11 @@
 
 Lesy 部署在服务器上时，agent 的配置只有地址不同：
 
-| 方式        | 配置                                                       |
-| ----------- | ---------------------------------------------------------- |
-| Claude Code | `https://<你的域名>/api/mcp`                               |
-| stdio 桥    | `LESY_URL=https://<你的域名>`                              |
-| 命令行      | `lesy auth login --url https://<你的域名>`，之后会记住地址 |
+| 方式                 | 配置                                                       |
+| -------------------- | ---------------------------------------------------------- |
+| 命令行（推荐）       | `lesy auth login --url https://<你的域名>`，之后会记住地址 |
+| Claude Code 手动配置 | `https://<你的域名>/api/mcp`                               |
+| stdio 桥             | `LESY_URL=https://<你的域名>`                              |
 
 **只用 HTTPS**，不要让 Token 走明文的 HTTP。
 
@@ -20,8 +20,9 @@ Lesy 部署在服务器上时，agent 的配置只有地址不同：
 
 本机的 Token 随账户数据库一起迁到服务器后仍然有效，但地址变了：
 
-1. 把 Claude Code 和 Claude Desktop 的配置改成服务器的地址。
-2. 给每个客户端发一个新 Token，吊销旧的。
+1. 用命令行时，运行 `lesy auth login --url https://<你的域名>` 重新登录。
+2. 手动配置的客户端，把地址改成服务器的地址，并换一个新 Token。
+3. 在 “Profil” → “API-Tokens” 里吊销旧的 Token。
 
 ## OAuth 2.1（还没有实现）
 

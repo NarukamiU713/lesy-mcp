@@ -1,8 +1,20 @@
 # 客户端配置
 
-下面的 `lesy_pat_…` 都要换成你自己的 Token，创建方法见 [Token 和权限](tokens.md)。
+## 命令行 + Skill（推荐）
 
-## 地址
+Claude Code、Codex 和其他能运行 shell 的 agent 都走这一种，不用手动复制 Token：
+
+1. 安装命令行：见[命令行 `lesy`](cli.md#安装)。
+2. 安装 Skill：见 [Skill 的说明](../skills/lesy/README.md#安装)。
+3. 登录：运行 `lesy auth login`，在浏览器里批准；或者让 agent 在第一次使用时发起，你批准后告诉它。
+
+Lesy 不在本机时，登录时加 `--url https://<你的域名>`，见[连接到服务器](remote.md)。
+
+## 手动复制 Token
+
+只有 agent 不能运行 shell（例如 Claude Desktop），或者你不想装命令行时才用这一种。下面的 `lesy_pat_…` 都要换成你自己的 Token，创建方法见[手动创建](tokens.md#手动创建)。
+
+### 地址
 
 地址总是 **Lesy 后端**的地址：
 
@@ -14,9 +26,9 @@
 - `npm start`、一键启动和 `npm run dev` 都在 8787 端口上运行后端。改过 `HOST` 或 `BACKEND_PORT` 时相应地修改地址。
 - 开发时浏览器打开的 `http://localhost:5173` 是 Vite（端口还可能变成 5174 …），不要把 agent 指向它。
 
-## Claude Code
+### Claude Code
 
-Claude Code 直接连 HTTP 端点：
+Claude Code 可以直接连 HTTP 端点：
 
 ```powershell
 claude mcp add --transport http lesy http://127.0.0.1:8787/api/mcp --header "Authorization: Bearer lesy_pat_…"
@@ -25,7 +37,7 @@ claude mcp add --transport http lesy http://127.0.0.1:8787/api/mcp --header "Aut
 - 默认只在当前目录的项目中可用；加 `--scope user` 后在所有项目中可用。
 - `claude mcp list` 查看连接状态。
 
-## Claude Desktop
+### Claude Desktop
 
 Claude Desktop 的本地服务器走 stdio，所以要经过 Lesy 主仓库里的桥 `scripts/lesy-mcp.mjs`。它把 stdio 上的消息转发给 `/api/mcp`，本身不实现任何工具。
 
@@ -55,7 +67,7 @@ Claude Desktop 的本地服务器走 stdio，所以要经过 Lesy 主仓库里�
 
 执行过 `npm link`（见[命令行 `lesy`](cli.md#安装)）之后，`command` 也可以直接写 `lesy-mcp`，不要 `args`。Windows 上找不到时写 `lesy-mcp.cmd`，或者照上面用 `node`。
 
-## 其他 stdio 客户端
+### 其他 stdio 客户端
 
 用同一个桥，同样需要 `LESY_URL` 和 `LESY_TOKEN`：
 
@@ -71,7 +83,3 @@ node <主仓库>/scripts/lesy-mcp.mjs
 - 把 stdin 上的 JSON-RPC 消息带着 `Authorization: Bearer <LESY_TOKEN>` 转发给后端，把回答写到 stdout。
 - 转发失败（后端不可达、HTTP 错误如 401）时，对这个请求回答一个 JSON-RPC error，客户端能看到原因。
 - stdout 只用于 MCP 消息，诊断信息都写到 stderr。
-
-## Codex 和其他能运行 shell 的 agent
-
-用[命令行 `lesy`](cli.md) 加 [Skill](../skills/lesy/README.md)，不用手动复制 Token。

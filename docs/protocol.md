@@ -1,6 +1,6 @@
 # HTTP 协议
 
-用 MCP 客户端或 SDK 时不用关心这些；这一页给想直接调用端点的人。
+用命令行 `lesy`、MCP 客户端或 SDK 时不用关心这些；这一页给想直接调用端点的人。
 
 Lesy 用 [MCP](https://modelcontextprotocol.io) 的 Streamable HTTP 传输，端点是 `POST /api/mcp`。
 
