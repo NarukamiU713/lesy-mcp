@@ -20,6 +20,7 @@ Skill 就是这个目录（`SKILL.md` 和本文件），复制整个 `skills/les
 **Claude Code**：全局安装复制到 `~/.claude/skills/lesy/`（Windows 上是 `%USERPROFILE%\.claude\skills\lesy\`），只在某个项目中使用时复制到那个项目的 `.claude/skills/lesy/`。重新启动 Claude Code 后生效。
 
 ```powershell
+New-Item -ItemType Directory -Force $env:USERPROFILE\.claude\skills | Out-Null
 Copy-Item -Recurse skills\lesy $env:USERPROFILE\.claude\skills\lesy
 ```
 
